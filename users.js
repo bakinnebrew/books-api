@@ -2,6 +2,12 @@ const db = require('./db');
 const helper = require('./helper.js');
 const config = require('./config.js');
 
+//
+//FUNCTIONS BELOW ENGAGE WITH THE MYSQL DATABASE
+//
+
+
+//function for requesting all users
 async function getUsers(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
@@ -18,6 +24,7 @@ async function getUsers(page = 1){
   }
   }
 
+//function for adding a user to the database
   async function create(user){
     const user_name = user.first_name + " " + user.last_name
     const result = await db.query(
@@ -39,6 +46,7 @@ async function getUsers(page = 1){
     return{message}
   }
 
+//function for retrieving the amount of checkedout books based on user id
   async function getUserdata(id){
     console.log(id)
     const user = await db.query(
@@ -52,6 +60,7 @@ async function getUsers(page = 1){
     }
   }
 
+//function for updating the amount of checkout books a user has
   async function updateCheckedoutBooks(id, user){
     const result = await db.query(
       `UPDATE Users
@@ -71,6 +80,7 @@ async function getUsers(page = 1){
 
   }
 
+ //function for deleting user based on id
   async function deleteUser(id){
     const result = await db.query(
       `DELETE FROM Users WHERE id=${id}`
