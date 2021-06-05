@@ -3,6 +3,7 @@ const { func } = require('joi');
 const router = express.Router();
 const Users = require('./users.js');
 
+//route that requests for all users in the database
 router.get('/', async function(req, res, next) {
     try {
       res.json(await Users.getUsers(req.query.page));
@@ -13,6 +14,7 @@ router.get('/', async function(req, res, next) {
     }
   });
 
+//route for adding a user to the database
 router.post('/add', async function(req, res, next) {
   try {
     res.json(await Users.create(req.body));
@@ -21,6 +23,7 @@ router.post('/add', async function(req, res, next) {
     next(err)
   }
 })
+
 
 router.get('/:id', async function(req, res, next) {
   try {
@@ -31,6 +34,8 @@ router.get('/:id', async function(req, res, next) {
   }
 })
 
+//route for editing the state of the user
+//the amount of the checkedout books will be changed
 router.put('/checkout/:id', async function(req, res, next) {
     try {
       res.json(await Users.updateCheckedoutBooks(req.params.id, req.body));
@@ -40,6 +45,7 @@ router.put('/checkout/:id', async function(req, res, next) {
   }
 })
 
+//route for deleting user based on id
 router.delete('/delete/:id', async function(req, res, next) {
   try {
     res.json(await Users.deleteUser(req.params.id))
