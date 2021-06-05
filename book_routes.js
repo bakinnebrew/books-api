@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Books = require('./books.js');
 
+//'homepage' route that renders a list of all books
 router.get('/', async function(req, res, next) {
   try {
     res.json(await Books.getMultiple(req.query.page));
@@ -11,6 +12,7 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+//route for adding a book
 router.post('/add', async function(req, res, next) {
   try {
     res.json(await Books.create(req.body));
@@ -20,6 +22,7 @@ router.post('/add', async function(req, res, next) {
   }
 })
 
+//route for rendering data for single book based on id as parameter
 router.get(`/:id`, async function(req, res, next) {
   try {
     res.json(await Books.getSingle(req.params.id));
@@ -29,6 +32,7 @@ router.get(`/:id`, async function(req, res, next) {
   }
 })
 
+//route for editing the data of book based on book id as a paramter
 router.put('/edit/:id', async function(req, res, next) {
   try {
     res.json(await Books.update(req.params.id, req.body));
@@ -38,6 +42,9 @@ router.put('/edit/:id', async function(req, res, next) {
   }
 });
 
+//route for 'checking out' a book based on book id
+//this route changes data of book from checkedout: false, to true
+//it also adds the 'borrower' to the book object 
 router.put('/checkout/:id', async function(req, res, next) {
   try {
     res.json(await Books.checkout(req.params.id, req.body));
@@ -47,6 +54,7 @@ router.put('/checkout/:id', async function(req, res, next) {
   }
 });
 
+//route that loads all books checkedut by a user with the id as the  function parameter
 router.get('/checkedout/:id', async function(req, res, next) {
   try {
     res.json(await Books.getCheckedoutBooks(req.query.page, req.params.id));
@@ -56,6 +64,8 @@ router.get('/checkedout/:id', async function(req, res, next) {
   }
 });
 
+//similar to the checkout route, this reverts the book back to its default object state
+//removing the 'borrower' value to the relevant key, and 'checkedout' to false
 router.put('/turn_in/:id', async function(req, res, next) {
   try {
     res.json(await Books.turnInBook(req.params.id, req.body));
@@ -65,6 +75,7 @@ router.put('/turn_in/:id', async function(req, res, next) {
   }
 })
 
+//deletes a book from the database, and consequently the DOM, based on book id
 router.delete('/delete/:id', async function(req, res, next) {
   try {
     res.json(await Books.deleteBook(req.params.id, req.body));
